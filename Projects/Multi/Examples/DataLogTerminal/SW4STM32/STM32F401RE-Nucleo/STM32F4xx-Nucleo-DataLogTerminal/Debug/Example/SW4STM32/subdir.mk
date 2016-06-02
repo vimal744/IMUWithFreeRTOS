@@ -4,14 +4,14 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 S_SRCS += \
-C:/Users/mehta/workspace/STM32/SensorFusion_Final_2/Projects/Multi/Examples/DataLogTerminal/SW4STM32/STM32F401RE-Nucleo/startup_stm32f401xe.s 
+C:/Users/mehta/Documents/GitHub/IMUWithFreeRTOS/Projects/Multi/Examples/DataLogTerminal/SW4STM32/STM32F401RE-Nucleo/startup_stm32f401xe.s 
 
 OBJS += \
 ./Example/SW4STM32/startup_stm32f401xe.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes
-Example/SW4STM32/startup_stm32f401xe.o: C:/Users/mehta/workspace/STM32/SensorFusion_Final_2/Projects/Multi/Examples/DataLogTerminal/SW4STM32/STM32F401RE-Nucleo/startup_stm32f401xe.s
+Example/SW4STM32/startup_stm32f401xe.o: C:/Users/mehta/Documents/GitHub/IMUWithFreeRTOS/Projects/Multi/Examples/DataLogTerminal/SW4STM32/STM32F401RE-Nucleo/startup_stm32f401xe.s
 	@echo 'Building file: $<'
 	@echo 'Invoking: MCU GCC Assembler'
 	@echo %cd%

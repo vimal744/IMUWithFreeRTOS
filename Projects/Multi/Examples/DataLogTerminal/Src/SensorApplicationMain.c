@@ -94,16 +94,16 @@ static void MainSensorApp
         // Get the Quaternion data from the sensor fusion interface
         SensorFusionGetQuaternionData(&quaternionSensorData);
 
-        // Write the data to the console
-        Printf
-            (
-            "Sensor App: ts=%d, x=%.3f, y=%.3f, z=%.3f, w=%.3f\r\n",
-            quaternionSensorData.TimeStamp,
-            quaternionSensorData.MeasurementX,
-            quaternionSensorData.MeasurementY,
-            quaternionSensorData.MeasurementZ,
-            quaternionSensorData.MeasurementW
-            );
+//        // Write the data to the console
+//        Printf
+//            (
+//            "Sensor App: ts=%d, x=%.3f, y=%.3f, z=%.3f, w=%.3f\r\n",
+//            quaternionSensorData.TimeStamp,
+//            quaternionSensorData.MeasurementX,
+//            quaternionSensorData.MeasurementY,
+//            quaternionSensorData.MeasurementZ,
+//            quaternionSensorData.MeasurementW
+//            );
 
         osDelay(1000);
     }

@@ -29,6 +29,7 @@
 
 /* Printf statement for debugging */
 #define SensorFusion_Debug_Printf( _args ) //Printf _args
+#define SensorFusion_Debug_Printf2( _args ) Printf _args
 
 /* Memory Constants ----------------------------------------------------------*/
 
@@ -225,7 +226,7 @@ static void MainSensorFusion
         if( ProcessDataQueue() )
         {
             // Update the quaternion data
-            UpdateQuaternionData();
+            //UpdateQuaternionData();
         }
     }
 }
@@ -273,7 +274,7 @@ static boolean ProcessDataQueue
             }
         else if( SNSR_ID_CMPS == queueItem.SensorId )
             {
-            SensorFusion_Debug_Printf
+            SensorFusion_Debug_Printf2
                 ((
                 "SF: Rx Cmps ts=%d, x=%f, y=%f, z=%f\r\n",
                 queueItem.TimeStamp,
