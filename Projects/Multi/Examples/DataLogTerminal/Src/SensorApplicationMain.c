@@ -13,6 +13,7 @@
 
 #include "SensorApplicationInterface.h"
 #include "SensorFusionInterface.h"
+#include "ThreadPriorities.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include "PrintUtility.h"
@@ -52,7 +53,7 @@ void SensorApplicationPowerUp
     ( void )
 {
     // Create the sensor application thread
-    xTaskCreate( MainSensorApp, c_ThreadName, SENSOR_APP_MAIN_STACK_SIZE, NULL, tskIDLE_PRIORITY, &s_SensorApp_Main_Handle );
+    xTaskCreate( MainSensorApp, c_ThreadName, SENSOR_APP_MAIN_STACK_SIZE, NULL, SENSOR_APPLICATION_TASK_PRI, &s_SensorApp_Main_Handle );
 }
 
 /**

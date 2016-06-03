@@ -42,7 +42,9 @@
 #include <math.h>   /* trunc */
 #include "main.h"
 #include "UartInterface.h"
-#include "SensorReaderInterface.h"
+#include "SensorAccelReaderInterface.h"
+#include "SensorGyroReaderInterface.h"
+#include "SensorMagReaderInterface.h"
 #include "SensorFusionInterface.h"
 #include "SensorApplicationInterface.h"
 
@@ -108,12 +110,18 @@ int main( void )
     // Powerup the various modules
     UartInit();
     SensorFusionPowerUp();
-    SensorReaderPowerUp();
+    SensorAccelReaderPowerUp();
+    SensorGyroReaderPowerUp();
+    SensorMagReaderPowerUp();
+
     SensorApplicationPowerUp();
 
     // Init the various modules
     SensorFusionInit();
-    SensorReaderInit();
+    SensorAccelReaderInit();
+    SensorGyroReaderInit();
+    SensorMagReaderInit();
+
     SensorApplicationInit();
 
     /* Start scheduler */

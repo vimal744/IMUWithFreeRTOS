@@ -326,6 +326,11 @@
 			<locationURI>PARENT-3-PROJECT_LOC/Inc/GyroTypes.h</locationURI>
 		</link>
 		<link>
+			<name>Example/User/Inc/SensorAccelReaderInterface.h</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/Inc/SensorAccelReaderInterface.h</locationURI>
+		</link>
+		<link>
 			<name>Example/User/Inc/SensorApplicationInterface.h</name>
 			<type>1</type>
 			<locationURI>PARENT-3-PROJECT_LOC/Inc/SensorApplicationInterface.h</locationURI>
@@ -336,9 +341,19 @@
 			<locationURI>PARENT-3-PROJECT_LOC/Inc/SensorFusionInterface.h</locationURI>
 		</link>
 		<link>
-			<name>Example/User/Inc/SensorReaderInterface.h</name>
+			<name>Example/User/Inc/SensorGyroReaderInterface.h</name>
 			<type>1</type>
-			<locationURI>PARENT-3-PROJECT_LOC/Inc/SensorReaderInterface.h</locationURI>
+			<locationURI>PARENT-3-PROJECT_LOC/Inc/SensorGyroReaderInterface.h</locationURI>
+		</link>
+		<link>
+			<name>Example/User/Inc/SensorMagReaderInterface.h</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/Inc/SensorMagReaderInterface.h</locationURI>
+		</link>
+		<link>
+			<name>Example/User/Inc/ThreadPriorities.h</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/Inc/ThreadPriorities.h</locationURI>
 		</link>
 		<link>
 			<name>Example/User/Inc/UartInterface.h</name>
@@ -381,6 +396,11 @@
 			<locationURI>PARENT-3-PROJECT_LOC/Src/PrintUtility.c</locationURI>
 		</link>
 		<link>
+			<name>Example/User/Src/SensorAccelReaderMain.c</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/Src/SensorAccelReaderMain.c</locationURI>
+		</link>
+		<link>
 			<name>Example/User/Src/SensorApplicationMain.c</name>
 			<type>1</type>
 			<locationURI>PARENT-3-PROJECT_LOC/Src/SensorApplicationMain.c</locationURI>
@@ -391,9 +411,14 @@
 			<locationURI>PARENT-3-PROJECT_LOC/Src/SensorFusionMain.c</locationURI>
 		</link>
 		<link>
-			<name>Example/User/Src/SensorReaderMain.c</name>
+			<name>Example/User/Src/SensorGyroReaderMain.c</name>
 			<type>1</type>
-			<locationURI>PARENT-3-PROJECT_LOC/Src/SensorReaderMain.c</locationURI>
+			<locationURI>PARENT-3-PROJECT_LOC/Src/SensorGyroReaderMain.c</locationURI>
+		</link>
+		<link>
+			<name>Example/User/Src/SensorMagReaderMain.c</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/Src/SensorMagReaderMain.c</locationURI>
 		</link>
 		<link>
 			<name>Example/User/Src/UartInterface.c</name>

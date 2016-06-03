@@ -12,6 +12,7 @@
 /* Public Includes -----------------------------------------------------------*/
 
 #include "SensorFusionInterface.h"
+#include "ThreadPriorities.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include "PrintUtility.h"
@@ -28,8 +29,7 @@
 #define SENSOR_FUSION_MAIN_STACK_SIZE      ( 256 )
 
 /* Printf statement for debugging */
-#define SensorFusion_Debug_Printf( _args ) //Printf _args
-#define SensorFusion_Debug_Printf2( _args ) Printf _args
+#define SensorFusion_Debug_Printf( _args ) Printf _args
 
 /* Memory Constants ----------------------------------------------------------*/
 
@@ -110,7 +110,7 @@ void SensorFusionPowerUp
     s_DataQueue            = xQueueCreate( 32, sizeof( QueueDataType ) );
 
     // Create the sensor fusion thread
-    xTaskCreate( MainSensorFusion, c_ThreadName, SENSOR_FUSION_MAIN_STACK_SIZE, NULL, tskIDLE_PRIORITY, &s_SensorFusion_Main_Handle );
+    xTaskCreate( MainSensorFusion, c_ThreadName, SENSOR_FUSION_MAIN_STACK_SIZE, NULL, SENSOR_FUSION_TASK_PRI, &s_SensorFusion_Main_Handle );
 }
 
 /**
@@ -250,7 +250,7 @@ static boolean ProcessDataQueue
     {
         if( SNSR_ID_GYRO == queueItem.SensorId )
             {
-            SensorFusion_Debug_Printf
+        	SensorFusion_Debug_Printf
                 ((
                 "SF: Rx Gyro ts=%d, x=%f, y=%f, z=%f\r\n",
                 queueItem.TimeStamp,
@@ -262,7 +262,7 @@ static boolean ProcessDataQueue
             }
         else if( SNSR_ID_ACCEL == queueItem.SensorId )
             {
-            SensorFusion_Debug_Printf
+        	SensorFusion_Debug_Printf
                 ((
                 "SF: Rx Accl ts=%d, x=%f, y=%f, z=%f\r\n",
                 queueItem.TimeStamp,
@@ -274,7 +274,7 @@ static boolean ProcessDataQueue
             }
         else if( SNSR_ID_CMPS == queueItem.SensorId )
             {
-            SensorFusion_Debug_Printf2
+            SensorFusion_Debug_Printf
                 ((
                 "SF: Rx Cmps ts=%d, x=%f, y=%f, z=%f\r\n",
                 queueItem.TimeStamp,
