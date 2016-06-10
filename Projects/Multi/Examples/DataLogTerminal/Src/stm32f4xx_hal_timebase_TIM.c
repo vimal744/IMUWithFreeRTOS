@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    stm32f4xx_hal_timebase_TIM.c 
+  * @file    stm32f4xx_hal_timebase_TIM.c
   * @brief   HAL time base based on the hardware TIM.
   ******************************************************************************
   *
@@ -40,23 +40,23 @@
 
 /** @addtogroup HAL_TimeBase
   * @{
-  */ 
+  */
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-TIM_HandleTypeDef        htim1; 
+TIM_HandleTypeDef        htim1;
 uint32_t                 uwIncrementState = 0;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
 /**
-  * @brief  This function configures the TIM1 as a time base source. 
-  *         The time source is configured  to have 1ms time base with a dedicated 
-  *         Tick interrupt priority. 
+  * @brief  This function configures the TIM1 as a time base source.
+  *         The time source is configured  to have 1ms time base with a dedicated
+  *         Tick interrupt priority.
   * @note   This function is called  automatically at the beginning of program after
-  *         reset by HAL_Init() or at any time when clock is configured, by HAL_RCC_ClockConfig(). 
+  *         reset by HAL_Init() or at any time when clock is configured, by HAL_RCC_ClockConfig().
   * @param  TickPriority: Tick interrupt priorty.
   * @retval HAL status
   */
@@ -66,28 +66,28 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
   uint32_t              uwTimclock = 0;
   uint32_t              uwPrescalerValue = 0;
   uint32_t              pFLatency;
-  
+
   /*Configure the TIM1 IRQ priority */
-  HAL_NVIC_SetPriority(TIM1_UP_TIM10_IRQn, TickPriority ,0); 
-  
+  HAL_NVIC_SetPriority(TIM1_UP_TIM10_IRQn, TickPriority ,0);
+
   /* Enable the TIM1 global Interrupt */
-  HAL_NVIC_EnableIRQ(TIM1_UP_TIM10_IRQn); 
-  
+  HAL_NVIC_EnableIRQ(TIM1_UP_TIM10_IRQn);
+
   /* Enable TIM1 clock */
   __HAL_RCC_TIM1_CLK_ENABLE();
-  
+
   /* Get clock configuration */
   HAL_RCC_GetClockConfig(&clkconfig, &pFLatency);
-  
+
   /* Compute TIM1 clock */
   uwTimclock = HAL_RCC_GetPCLK2Freq();
-   
+
   /* Compute the prescaler value to have TIM1 counter clock equal to 1MHz */
   uwPrescalerValue = (uint32_t) ((uwTimclock / 1000000) - 1);
-  
+
   /* Initialize TIM1 */
   htim1.Instance = TIM1;
-  
+
   /* Initialize TIMx peripheral as follow:
   + Period = [(TIM1CLK/1000) - 1]. to have a (1/1000) s time base.
   + Prescaler = (uwTimclock/1000000 - 1) to have a 1MHz counter clock.
@@ -103,7 +103,7 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
     /* Start the TIM time Base generation in interrupt mode */
     return HAL_TIM_Base_Start_IT(&htim1);
   }
-  
+
   /* Return function status */
   return HAL_ERROR;
 }
@@ -117,7 +117,7 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 void HAL_SuspendTick(void)
 {
   /* Disable TIM1 update Interrupt */
-  __HAL_TIM_DISABLE_IT(&htim1, TIM_IT_UPDATE);                                                  
+  __HAL_TIM_DISABLE_IT(&htim1, TIM_IT_UPDATE);
 }
 
 /**
@@ -128,8 +128,8 @@ void HAL_SuspendTick(void)
   */
 void HAL_ResumeTick(void)
 {
-  /* Enable TIM1 Update interrupt */
-  __HAL_TIM_ENABLE_IT(&htim1, TIM_IT_UPDATE);
+    /* Enable TIM1 Update interrupt */
+    __HAL_TIM_ENABLE_IT(&htim1, TIM_IT_UPDATE);
 }
 
 /**
@@ -142,15 +142,15 @@ void HAL_ResumeTick(void)
   */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-  HAL_IncTick();
+    HAL_IncTick();
 }
 
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

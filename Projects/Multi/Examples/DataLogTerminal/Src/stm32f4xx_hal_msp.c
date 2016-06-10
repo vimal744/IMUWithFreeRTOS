@@ -52,6 +52,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
+static uint32_t ttick = 0;
 
 /* USER CODE BEGIN 0 */
 

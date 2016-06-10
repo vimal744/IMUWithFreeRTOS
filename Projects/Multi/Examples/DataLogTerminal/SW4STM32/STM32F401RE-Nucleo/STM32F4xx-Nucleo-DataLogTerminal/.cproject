@@ -35,8 +35,10 @@
 									<listOptionValue builtIn="false" value="../../../../../../../../Drivers/BSP/STM32F4xx-Nucleo"/>
 									<listOptionValue builtIn="false" value="../../../../../../../../Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../../../../../../../../Drivers/BSP/X_NUCLEO_IKS01A1"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Drivers/BSP/ADA_FRUIT_LCD"/>
 									<listOptionValue builtIn="false" value="../../../../../../../../Drivers/BSP/Components/Common"/>
 									<listOptionValue builtIn="false" value="../../../../../../../../Drivers/BSP/Components/hts221"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Drivers/BSP/Components/ili9341"/>
 									<listOptionValue builtIn="false" value="../../../../../../../../Drivers/BSP/Components/lis3mdl"/>
 									<listOptionValue builtIn="false" value="../../../../../../../../Drivers/BSP/Components/lps25hb"/>
 									<listOptionValue builtIn="false" value="../../../../../../../../Drivers/BSP/Components/lsm6ds0"/>
