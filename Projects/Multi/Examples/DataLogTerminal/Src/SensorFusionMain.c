@@ -19,6 +19,7 @@
 #include <queue.h>
 #include <string.h>
 #include <semphr.h>
+#include "MadgwickAHRS.h"
 
 /* Private Includes ----------------------------------------------------------*/
 
@@ -29,7 +30,7 @@
 #define SENSOR_FUSION_MAIN_STACK_SIZE      ( 256 )
 
 /* Printf statement for debugging */
-#define SensorFusion_Debug_Printf( _args ) Printf _args
+#define SensorFusion_Debug_Printf( _args ) //Printf _args
 
 /* Memory Constants ----------------------------------------------------------*/
 
@@ -71,6 +72,17 @@ static QueueHandle_t                s_DataQueue;
 static SensorQuaternionDataType     s_QuaternionData;
 static SemaphoreHandle_t            s_QuaternionData_Mutex;
 
+static GyroDataType    s_LastGyroData;
+static boolean         s_GyroDataValid;
+
+static AccelDataType   s_LastAccelData;
+static boolean         s_AccelDataValid;
+
+static CompassDataType s_LastCmpsData;
+static boolean         s_CompassDataValid;
+
+static uint32_t        s_LastTimeStamp;
+
 /* Procedures ----------------------------------------------------------------*/
 
 static boolean AddData
@@ -90,12 +102,6 @@ static boolean ProcessDataQueue
     void
     );
 
-static void UpdateQuaternionData
-    (
-    void
-    );
-
-
 /**
 * @brief Power up the sensor fusion thread
 */
@@ -104,10 +110,23 @@ void SensorFusionPowerUp
     ( void )
 {
     // Create the mutex
-    s_QuaternionData_Mutex = xSemaphoreCreateRecursiveMutex();
+    s_QuaternionData_Mutex        = xSemaphoreCreateRecursiveMutex();
 
     // Create the queue to hold the incoming sensor data
     s_DataQueue            = xQueueCreate( 32, sizeof( QueueDataType ) );
+
+
+    memset( &s_LastGyroData, 0, sizeof( GyroDataType ) );
+    s_GyroDataValid = FALSE;
+
+    memset( &s_LastAccelData, 0, sizeof( AccelDataType ) );
+    s_AccelDataValid = FALSE;
+
+    memset( &s_LastCmpsData, 0, sizeof( CompassDataType ) );
+    s_CompassDataValid = FALSE;
+
+    s_LastTimeStamp = 0;
+
 
     // Create the sensor fusion thread
     xTaskCreate( MainSensorFusion, c_ThreadName, SENSOR_FUSION_MAIN_STACK_SIZE, NULL, SENSOR_FUSION_TASK_PRI, &s_SensorFusion_Main_Handle );
@@ -150,6 +169,21 @@ void SensorFusionGetQuaternionData
     memcpy( (void*)a_PtrData, &s_QuaternionData, sizeof( SensorQuaternionDataType ) );
     xSemaphoreGive( s_QuaternionData_Mutex );
 }
+
+/**
+* @brief Interface to the quaternion data from the SF thread
+*/
+
+void SensorFusionSetQuaternionData
+    (
+    const SensorQuaternionDataType* const a_PtrData
+    )
+{
+    xSemaphoreTake( s_QuaternionData_Mutex, portMAX_DELAY );
+    memcpy( &s_QuaternionData, (void*)a_PtrData, sizeof( SensorQuaternionDataType ) );
+    xSemaphoreGive( s_QuaternionData_Mutex );
+}
+
 
 /**
 * @brief Interface to add Gyro data to the SF thread
@@ -225,8 +259,16 @@ static void MainSensorFusion
         // Process the data in the queue
         if( ProcessDataQueue() )
         {
-            // Update the quaternion data
-            //UpdateQuaternionData();
+            if( s_AccelDataValid && s_GyroDataValid && s_CompassDataValid )
+            {
+                MadgwickAHRSupdate
+                    (
+                    s_LastGyroData.meas[0], s_LastGyroData.meas[1], s_LastGyroData.meas[2],
+                    s_LastAccelData.meas[0], s_LastAccelData.meas[1], s_LastAccelData.meas[2],
+                    s_LastCmpsData.meas[0], s_LastCmpsData.meas[1], s_LastCmpsData.meas[2],
+					s_LastTimeStamp
+                    );
+            }
         }
     }
 }
@@ -248,9 +290,13 @@ static boolean ProcessDataQueue
     // If the data was read properly from the queue
     if( pdTRUE == xQueueReceive( s_DataQueue, &queueItem, portMAX_DELAY ) )
     {
+        s_LastTimeStamp = queueItem.TimeStamp;
+
         if( SNSR_ID_GYRO == queueItem.SensorId )
             {
-        	SensorFusion_Debug_Printf
+            memcpy( &s_LastGyroData, &(queueItem.SensorData), sizeof( GyroDataType ) );
+            s_GyroDataValid = TRUE;
+            SensorFusion_Debug_Printf
                 ((
                 "SF: Rx Gyro ts=%d, x=%f, y=%f, z=%f\r\n",
                 queueItem.TimeStamp,
@@ -262,7 +308,10 @@ static boolean ProcessDataQueue
             }
         else if( SNSR_ID_ACCEL == queueItem.SensorId )
             {
-        	SensorFusion_Debug_Printf
+        	memcpy( &s_LastAccelData, &(queueItem.SensorData), sizeof( AccelDataType ) );
+            s_AccelDataValid = TRUE;
+
+            SensorFusion_Debug_Printf
                 ((
                 "SF: Rx Accl ts=%d, x=%f, y=%f, z=%f\r\n",
                 queueItem.TimeStamp,
@@ -274,6 +323,9 @@ static boolean ProcessDataQueue
             }
         else if( SNSR_ID_CMPS == queueItem.SensorId )
             {
+        	memcpy( &s_LastCmpsData, &(queueItem.SensorData), sizeof( CompassDataType ) );
+            s_CompassDataValid = TRUE;
+
             SensorFusion_Debug_Printf
                 ((
                 "SF: Rx Cmps ts=%d, x=%f, y=%f, z=%f\r\n",
@@ -288,26 +340,4 @@ static boolean ProcessDataQueue
 
     return success;
 
-}
-
-
-/**
-* @brief Update the quaternion data
-*
-* NOTE: Currently simulating the data because I could not get the sensor board to work
-*/
-static void UpdateQuaternionData
-    (
-    void
-    )
-{
-    xSemaphoreTake( s_QuaternionData_Mutex, portMAX_DELAY );
-
-    s_QuaternionData.TimeStamp      = xTaskGetTickCount();
-    s_QuaternionData.MeasurementX   += 5.5f;
-    s_QuaternionData.MeasurementY   += 50.23f;
-    s_QuaternionData.MeasurementZ   += 500.123f;
-    s_QuaternionData.MeasurementW   += -5000.1312f;
-
-    xSemaphoreGive( s_QuaternionData_Mutex );
 }

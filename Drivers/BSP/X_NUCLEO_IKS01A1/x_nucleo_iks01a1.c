@@ -38,6 +38,8 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "x_nucleo_iks01a1.h"
+#include "cmsis_os.h"
+
 
 
 
@@ -59,6 +61,7 @@
 
 static uint32_t I2C_EXPBD_Timeout = NUCLEO_I2C_EXPBD_TIMEOUT_MAX;    /*<! Value of Timeout when I2C communication fails */
 static I2C_HandleTypeDef I2C_EXPBD_Handle;
+static SemaphoreHandle_t            s_I2C_Mutex;
 
 /**
  * @}
@@ -86,6 +89,7 @@ static uint8_t I2C_EXPBD_Init( void );
  */
 DrvStatusTypeDef Sensor_IO_Init( void )
 {
+  s_I2C_Mutex = xSemaphoreCreateRecursiveMutex();
 
   if ( I2C_EXPBD_Init() )
   {
@@ -96,7 +100,6 @@ DrvStatusTypeDef Sensor_IO_Init( void )
     return COMPONENT_OK;
   }
 }
-
 
 
 /**
@@ -334,6 +337,8 @@ static uint8_t I2C_EXPBD_WriteData( uint8_t Addr, uint8_t Reg, uint8_t* pBuffer,
 
   HAL_StatusTypeDef status = HAL_OK;
 
+  xSemaphoreTake( s_I2C_Mutex, portMAX_DELAY );
+
   status = HAL_I2C_Mem_Write( &I2C_EXPBD_Handle, Addr, ( uint16_t )Reg, I2C_MEMADD_SIZE_8BIT, pBuffer, Size, I2C_EXPBD_Timeout );
 
   /* Check the communication status */
@@ -342,10 +347,12 @@ static uint8_t I2C_EXPBD_WriteData( uint8_t Addr, uint8_t Reg, uint8_t* pBuffer,
 
     /* Execute user timeout callback */
     I2C_EXPBD_Error( Addr );
+    xSemaphoreGive( s_I2C_Mutex );
     return 1;
   }
   else
   {
+	xSemaphoreGive( s_I2C_Mutex );
     return 0;
   }
 }
@@ -366,6 +373,9 @@ static uint8_t I2C_EXPBD_ReadData( uint8_t Addr, uint8_t Reg, uint8_t* pBuffer, 
 
   HAL_StatusTypeDef status = HAL_OK;
 
+  xSemaphoreTake( s_I2C_Mutex, portMAX_DELAY );
+
+
   status = HAL_I2C_Mem_Read( &I2C_EXPBD_Handle, Addr, ( uint16_t )Reg, I2C_MEMADD_SIZE_8BIT, pBuffer, Size, I2C_EXPBD_Timeout );
 
   /* Check the communication status */
@@ -374,10 +384,12 @@ static uint8_t I2C_EXPBD_ReadData( uint8_t Addr, uint8_t Reg, uint8_t* pBuffer, 
 
     /* Execute user timeout callback */
     I2C_EXPBD_Error( Addr );
+    xSemaphoreGive( s_I2C_Mutex );
     return 1;
   }
   else
   {
+	xSemaphoreGive( s_I2C_Mutex );
     return 0;
   }
 }

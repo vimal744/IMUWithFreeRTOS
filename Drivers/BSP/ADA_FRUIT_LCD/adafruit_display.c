@@ -237,7 +237,7 @@ DrvStatusTypeDef BSP_DISPLAY_Write_String( void *handle, char* a_PtrString, uint
 }
 
 
-DrvStatusTypeDef BSP_DISPLAY_Set_Cursor( void *handle, uint16_t a_X, uint16_t a_Y )
+DrvStatusTypeDef BSP_DISPLAY_Set_Cursor( void *handle, int16_t a_X, int16_t a_Y )
 {
     DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
     DISPLAY_Drv_t *driver = NULL;

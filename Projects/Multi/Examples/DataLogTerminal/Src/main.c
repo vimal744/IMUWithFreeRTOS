@@ -110,20 +110,19 @@ int main( void )
 
     // Powerup the various modules
     UartInit();
-    //SensorFusionPowerUp();
+    SensorFusionPowerUp();
     SensorAccelReaderPowerUp();
-    //SensorGyroReaderPowerUp();
-    //SensorMagReaderPowerUp();
+    SensorGyroReaderPowerUp();
+    SensorMagReaderPowerUp();
 
-    //SensorApplicationPowerUp();
+    SensorApplicationPowerUp();
 
     // Init the various modules
-    //SensorFusionInit();
+    SensorFusionInit();
     SensorAccelReaderInit();
-    //SensorGyroReaderInit();
-    //SensorMagReaderInit();
-
-    //SensorApplicationInit();
+    SensorGyroReaderInit();
+    SensorMagReaderInit();
+    SensorApplicationInit();
 
     /* Start scheduler */
     osKernelStart();

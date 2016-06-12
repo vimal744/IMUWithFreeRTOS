@@ -21,11 +21,11 @@
 
 /* Types ---------------------------------------------------------------------*/
 
-#define SENSOR_FUSION_TASK_PRI			( 4 )
-#define SENSOR_ACCL_READER_TASK_PRI		( 3 )
-#define SENSOR_GYRO_READER_TASK_PRI		( 3 )
-#define SENSOR_MAG_READER_TASK_PRI		( 3 )
-#define SENSOR_APPLICATION_TASK_PRI		( 4 )
+#define SENSOR_FUSION_TASK_PRI          ( 3 )
+#define SENSOR_ACCL_READER_TASK_PRI     ( 3 )
+#define SENSOR_GYRO_READER_TASK_PRI     ( 3 )
+#define SENSOR_MAG_READER_TASK_PRI      ( 3 )
+#define SENSOR_APPLICATION_TASK_PRI     ( 5 )
 
 /* Procedures ----------------------------------------------------------------*/
 

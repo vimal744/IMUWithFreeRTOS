@@ -54,6 +54,12 @@ void SensorFusionGetQuaternionData
     const SensorQuaternionDataType* a_PtrData
     );
 
+void SensorFusionSetQuaternionData
+    (
+    const SensorQuaternionDataType* const a_PtrData
+    );
+
+
 boolean SensorFusionAddGyroData
     (
     const GyroDataType* const a_PtrGyroData

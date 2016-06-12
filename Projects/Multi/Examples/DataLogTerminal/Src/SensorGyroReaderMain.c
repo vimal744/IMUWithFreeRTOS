@@ -45,6 +45,7 @@ static const char* c_ThreadName = "SensorGyroReader_Main";
 
 static TaskHandle_t     s_SensorGyroReader_Main_Handle;
 static void*            LSM6DS0_G_0_handle = NULL;
+static boolean          s_GyroEnabled = FALSE;
 
 /* Procedures ----------------------------------------------------------------*/
 
@@ -61,6 +62,7 @@ static void MainSensorGyroReader( void* a_Ptr );
 void SensorGyroReaderPowerUp
     ( void )
 {
+    s_GyroEnabled = FALSE;
     initGyro();
     xTaskCreate( MainSensorGyroReader, c_ThreadName, SNSR_GYRO_READER_MAIN_STK_SZ, NULL, SENSOR_GYRO_READER_TASK_PRI, &s_SensorGyroReader_Main_Handle );
 }
@@ -72,7 +74,7 @@ void SensorGyroReaderPowerUp
 void SensorGyroReaderInit
     ( void )
 {
-    enableGyro();
+
 }
 
 /**
@@ -107,11 +109,13 @@ static void MainSensorGyroReader
 
     for(;;)
     {
+        enableGyro();
+
         // Populate Gyro Data
         Gyro_Sensor_Handler( &gyroData, LSM6DS0_G_0_handle );
         SensorGyroReader_Debug_Printf(("SR: Tx Gyro x=%f, y=%f, z=%f\r\n", gyroData.meas[0], gyroData.meas[1], gyroData.meas[2] ));
         SensorFusionAddGyroData( &gyroData );
-        osDelay(1000);
+        osDelay(1);
     }
 }
 
@@ -132,7 +136,11 @@ static void initGyro( void )
  */
 static void enableGyro( void )
 {
-    BSP_GYRO_Sensor_Enable( LSM6DS0_G_0_handle );
+    if( !s_GyroEnabled )
+    {
+        BSP_GYRO_Sensor_Enable( LSM6DS0_G_0_handle );
+        s_GyroEnabled = TRUE;
+    }
 }
 
 /**
@@ -142,7 +150,11 @@ static void enableGyro( void )
  */
 static void disableGyro( void )
 {
-    BSP_GYRO_Sensor_Disable( LSM6DS0_G_0_handle );
+    if( s_GyroEnabled )
+    {
+        BSP_GYRO_Sensor_Disable( LSM6DS0_G_0_handle );
+        s_GyroEnabled = TRUE;
+    }
 }
 
 /**

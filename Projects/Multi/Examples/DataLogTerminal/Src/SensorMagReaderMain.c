@@ -44,6 +44,7 @@ static const char* c_ThreadName = "SensorMagReader_Main";
 
 static TaskHandle_t     s_SensorMagReader_Main_Handle;
 static void*            LIS3MDL_0_handle = NULL;
+static boolean          s_MagEnabled    = FALSE;
 
 /* Procedures ----------------------------------------------------------------*/
 
@@ -53,6 +54,7 @@ static void disableMag( void );
 static void Mag_Sensor_Handler( CompassDataType* a_PtrCmpsData, void *handle );
 static void MainSensorMagReader( void* a_Ptr );
 
+
 /**
 * @brief Power up the sensor Reader thread
 */
@@ -60,6 +62,7 @@ static void MainSensorMagReader( void* a_Ptr );
 void SensorMagReaderPowerUp
     ( void )
 {
+    s_MagEnabled = FALSE;
     initMag();
     xTaskCreate( MainSensorMagReader, c_ThreadName, SNSR_MAG_READER_MAIN_STK_SZ, NULL, SENSOR_MAG_READER_TASK_PRI, &s_SensorMagReader_Main_Handle );
 }
@@ -71,7 +74,6 @@ void SensorMagReaderPowerUp
 void SensorMagReaderInit
     ( void )
 {
-    enableMag();
 }
 
 /**
@@ -106,11 +108,13 @@ static void MainSensorMagReader
 
     for(;;)
     {
+        enableMag();
+
         // Populate Compass Data
-    	Mag_Sensor_Handler( &cmpsData, LIS3MDL_0_handle );
-    	SensorMagReader_Debug_Printf(("SR: Tx Cmps x=%f, y=%f, z=%f\r\n", cmpsData.meas[0], cmpsData.meas[1], cmpsData.meas[2] ));
+        Mag_Sensor_Handler( &cmpsData, LIS3MDL_0_handle );
+        SensorMagReader_Debug_Printf(("SR: Tx Cmps x=%f, y=%f, z=%f\r\n", cmpsData.meas[0], cmpsData.meas[1], cmpsData.meas[2] ));
         SensorFusionAddCompassData( &cmpsData );
-        osDelay(1000);
+        osDelay(100);
     }
 }
 
@@ -131,7 +135,11 @@ static void initMag( void )
  */
 static void enableMag( void )
 {
-    BSP_MAGNETO_Sensor_Enable( LIS3MDL_0_handle );
+    if( !s_MagEnabled )
+    {
+        s_MagEnabled = TRUE;
+        BSP_MAGNETO_Sensor_Enable( LIS3MDL_0_handle );
+    }
 }
 
 /**
@@ -141,7 +149,12 @@ static void enableMag( void )
  */
 static void disableMag( void )
 {
-    BSP_MAGNETO_Sensor_Disable( LIS3MDL_0_handle );
+
+    if( s_MagEnabled )
+    {
+        BSP_MAGNETO_Sensor_Disable( LIS3MDL_0_handle );
+        s_MagEnabled = FALSE;
+    }
 }
 
 /**

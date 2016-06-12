@@ -71,7 +71,7 @@ DrvStatusTypeDef BSP_DISPLAY_Enable( void *handle );
 DrvStatusTypeDef BSP_DISPLAY_Disable( void *handle );
 DrvStatusTypeDef BSP_DISPLAY_Fill_Screen( void *handle, uint16_t a_Color );
 DrvStatusTypeDef BSP_DISPLAY_Write_Char( void* handle, unsigned char a_Char );
-DrvStatusTypeDef BSP_DISPLAY_Set_Cursor( void *handle, uint16_t a_X, uint16_t a_Y );
+DrvStatusTypeDef BSP_DISPLAY_Set_Cursor( void *handle, int16_t a_X, int16_t a_Y );
 DrvStatusTypeDef BSP_DISPLAY_Set_Text_Color( void *handle, uint16_t a_FC, uint16_t a_BC );
 DrvStatusTypeDef BSP_DISPLAY_Write_String( void *handle, char* a_PtrString, uint8_t size );
 DrvStatusTypeDef BSP_DISPLAY_Printf( void *handle, char *buf, int size, char *format, ...);

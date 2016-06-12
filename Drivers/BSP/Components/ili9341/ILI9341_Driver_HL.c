@@ -303,8 +303,8 @@ static DrvStatusTypeDef ILI9341_D_Display_Fill_Screen
     );
 
 static DrvStatusTypeDef ILI9341_D_Display_Write_Char( DrvContextTypeDef *handle, unsigned char c );
-static DrvStatusTypeDef ILI9341_D_Display_Set_Cursor( DrvContextTypeDef *handle, uint16_t x, uint16_t y );
 static DrvStatusTypeDef ILI9341_D_Display_Set_Text_Color( DrvContextTypeDef *handle, uint16_t fg, uint16_t bc );
+static DrvStatusTypeDef ILI9341_D_Display_Set_Cursor( DrvContextTypeDef *handle, int16_t x, int16_t y );
 
 
 static void swap( int16_t a, int16_t b );
@@ -356,8 +356,8 @@ DISPLAY_Drv_t ILI9341_D_Drv =
   ILI9341_D_Display_Fill_Rectange,
   ILI9341_D_Display_Fill_Screen,
   ILI9341_D_Display_Write_Char,
-  ILI9341_D_Display_Set_Text_Color,
   ILI9341_D_Display_Set_Cursor,
+  ILI9341_D_Display_Set_Text_Color,
 };
 
 static DrvStatusTypeDef ILI9341_D_Display_Write_Char( DrvContextTypeDef *handle, unsigned char c )
@@ -386,7 +386,7 @@ static DrvStatusTypeDef ILI9341_D_Display_Set_Text_Color( DrvContextTypeDef *han
     return COMPONENT_OK;
 }
 
-static DrvStatusTypeDef ILI9341_D_Display_Set_Cursor( DrvContextTypeDef *handle, uint16_t x, uint16_t y )
+static DrvStatusTypeDef ILI9341_D_Display_Set_Cursor( DrvContextTypeDef *handle, int16_t x, int16_t y )
 {
     if( !handle->isInitialized )
     {

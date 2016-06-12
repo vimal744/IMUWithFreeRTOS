@@ -426,6 +426,16 @@
 			<locationURI>PARENT-3-PROJECT_LOC/Inc/stm32f4xx_it.h</locationURI>
 		</link>
 		<link>
+			<name>Example/User/Src/MadgwickAHRS.c</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/Src/MadgwickAHRS.c</locationURI>
+		</link>
+		<link>
+			<name>Example/User/Src/MadgwickAHRS.h</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/Src/MadgwickAHRS.h</locationURI>
+		</link>
+		<link>
 			<name>Example/User/Src/PrintUtility.c</name>
 			<type>1</type>
 			<locationURI>PARENT-3-PROJECT_LOC/Src/PrintUtility.c</locationURI>
