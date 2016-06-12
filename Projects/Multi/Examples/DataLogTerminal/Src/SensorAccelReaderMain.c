@@ -143,9 +143,11 @@ static void initAccelerometer( void )
  */
 static void enableAccelerometer( void )
 {
+  char buff[10];
   BSP_ACCELERO_Sensor_Enable( LSM6DS0_X_0_handle );
   BSP_DISPLAY_Enable( Display_Handle );
   BSP_DISPLAY_Fill_Screen( Display_Handle, 0x0000);
+  BSP_DISPLAY_Printf( Display_Handle, buff, 10, "vimal %d", 5 );
 }
 
 /**

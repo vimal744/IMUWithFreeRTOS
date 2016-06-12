@@ -47,6 +47,7 @@
 #include "SensorMagReaderInterface.h"
 #include "SensorFusionInterface.h"
 #include "SensorApplicationInterface.h"
+#include "stm32f4xx_hal_conf.h"
 
 
 /** @addtogroup X_NUCLEO_IKS01A1_Examples

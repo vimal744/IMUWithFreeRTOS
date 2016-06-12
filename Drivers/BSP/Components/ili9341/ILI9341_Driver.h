@@ -160,7 +160,6 @@ ILI9341_Error_et ILI9341_DeInit(void *handle);
 ILI9341_Error_et ILI9341_Activate(void *handle);
 ILI9341_Error_et ILI9341_DeActivate(void *handle);
 ILI9341_Error_et ILI9341_SetAddressWindow(void *handle, uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
-ILI9341_Error_et ILI9341_PushColor(void *handle, uint16_t color);
 ILI9341_Error_et ILI9341_FillRect
     (
     void *handle,
@@ -176,6 +175,11 @@ ILI9341_Error_et ILI9341_FillScreen
     void *handle,
     uint16_t color
     );
+
+ILI9341_Error_et ILI9341_PushColor(void *handle, uint16_t color);
+ILI9341_Error_et ILI9341_DrawPixel(void *handle,  int16_t x, int16_t y, uint16_t color);
+ILI9341_Error_et ILI9341_DrawFastVerticalLine(void *handle, int16_t x, int16_t y, int16_t h, uint16_t color);
+ILI9341_Error_et ILI9341_DrawFastHorizontalLine(void *handle, int16_t x, int16_t y, int16_t w, uint16_t color);
 
 #ifdef __cplusplus
 }

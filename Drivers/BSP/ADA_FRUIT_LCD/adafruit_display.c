@@ -2,6 +2,10 @@
 
 #include "adafruit_display.h"
 #include "cmsis_os.h"
+#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdarg.h>
 
 static SPI_HandleTypeDef SPI1_Handle;
 
@@ -176,6 +180,104 @@ DrvStatusTypeDef BSP_DISPLAY_Fill_Screen( void *handle, uint16_t a_Color )
 
     return COMPONENT_OK;
 }
+
+DrvStatusTypeDef BSP_DISPLAY_Write_Char( void *handle, unsigned char a_Char )
+{
+    DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
+    DISPLAY_Drv_t *driver = NULL;
+
+    if(ctx == NULL)
+    {
+        return COMPONENT_ERROR;
+    }
+
+    driver = ( DISPLAY_Drv_t * )ctx->pVTable;
+
+    if ( driver->Display_Write_Char( ctx , a_Char ) == COMPONENT_ERROR )
+    {
+      return COMPONENT_ERROR;
+    }
+
+    return COMPONENT_OK;
+}
+
+DrvStatusTypeDef BSP_DISPLAY_Printf( void *handle, char *buf, int size, char *format, ...)
+{
+    va_list args;
+    int len;
+    va_start(args, format);
+    len = vsnprintf(buf, size, format, args);
+    va_end(args);
+
+    return BSP_DISPLAY_Write_String( handle, buf, len );
+}
+
+DrvStatusTypeDef BSP_DISPLAY_Write_String( void *handle, char* a_PtrString, uint8_t size )
+{
+    DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
+    DISPLAY_Drv_t *driver = NULL;
+    uint8_t i;
+
+    if(ctx == NULL)
+    {
+        return COMPONENT_ERROR;
+    }
+
+    driver = ( DISPLAY_Drv_t * )ctx->pVTable;
+
+    for( i = 0; i < size; i++ )
+    {
+        if ( driver->Display_Write_Char( ctx , a_PtrString[i] ) == COMPONENT_ERROR )
+        {
+          return COMPONENT_ERROR;
+        }
+    }
+
+    return COMPONENT_OK;
+}
+
+
+DrvStatusTypeDef BSP_DISPLAY_Set_Cursor( void *handle, uint16_t a_X, uint16_t a_Y )
+{
+    DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
+    DISPLAY_Drv_t *driver = NULL;
+
+    if(ctx == NULL)
+    {
+        return COMPONENT_ERROR;
+    }
+
+    driver = ( DISPLAY_Drv_t * )ctx->pVTable;
+
+    if ( driver->Display_Set_Cursor( ctx , a_X, a_Y ) == COMPONENT_ERROR )
+    {
+      return COMPONENT_ERROR;
+    }
+
+    return COMPONENT_OK;
+}
+
+DrvStatusTypeDef BSP_DISPLAY_Set_Text_Color( void *handle, uint16_t a_FC, uint16_t a_BC )
+{
+    DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
+    DISPLAY_Drv_t *driver = NULL;
+
+    if(ctx == NULL)
+    {
+        return COMPONENT_ERROR;
+    }
+
+    driver = ( DISPLAY_Drv_t * )ctx->pVTable;
+
+    if ( driver->Display_Set_Text_Color( ctx , a_FC, a_BC ) == COMPONENT_ERROR )
+    {
+      return COMPONENT_ERROR;
+    }
+
+    return COMPONENT_OK;
+}
+
+
 
 DrvStatusTypeDef BSP_DISPLAY_Disable( void *handle )
 {

@@ -174,6 +174,65 @@ ILI9341_Error_et ILI9341_FillScreen
     return ILI9341_FillRect( handle, color, 0, 0, MAX_WIDTH - 1, MAX_HEIGHT - 1 );
 }
 
+ILI9341_Error_et ILI9341_DrawPixel(void *handle,  int16_t x, int16_t y, uint16_t color)
+{
+
+    if((x < 0) ||(x >= MAX_WIDTH) || (y < 0) || (y >= MAX_HEIGHT))
+    {
+        return ILI9341_ERROR;
+    }
+
+    ILI9341_SetAddressWindow( handle, x, y , x+1, y+1 );
+
+    WriteData(handle, color >> 8);
+    WriteData(handle, color);
+
+    return ILI9341_OK;
+
+}
+
+ILI9341_Error_et ILI9341_DrawFastVerticalLine(void *handle, int16_t x, int16_t y, int16_t h, uint16_t color)
+{
+    // Rudimentary clipping
+    if((x >= MAX_WIDTH) || (y >= MAX_HEIGHT)) return ILI9341_ERROR;
+
+    if((y+h-1) >= MAX_HEIGHT)
+    h = MAX_HEIGHT-y;
+
+    ILI9341_SetAddressWindow( handle, x, y, x, y+h-1);
+
+    uint8_t hi = color >> 8, lo = color;
+
+    while( h-- )
+    {
+        WriteData(handle, hi);
+        WriteData(handle, lo);
+    }
+
+    return ILI9341_OK;
+
+}
+
+
+ILI9341_Error_et ILI9341_DrawFastHorizontalLine(void *handle, int16_t x, int16_t y, int16_t w, uint16_t color)
+{
+    // Rudimentary clipping
+    if((x >= MAX_WIDTH) || (y >= MAX_WIDTH)) return ILI9341_ERROR;
+
+    if((x+w-1) >= MAX_WIDTH)  w = MAX_WIDTH-x;
+
+    ILI9341_SetAddressWindow( handle, x, y, x+w-1, y );
+
+    uint8_t hi = color >> 8, lo = color;
+
+    while (w--)
+    {
+        WriteData(handle, hi);
+        WriteData(handle, lo);
+    }
+
+    return ILI9341_OK;
+}
 
 // fill a rectangle
 ILI9341_Error_et ILI9341_FillRect
