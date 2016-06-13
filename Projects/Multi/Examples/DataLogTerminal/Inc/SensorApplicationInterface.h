@@ -25,6 +25,10 @@
 
 /* Procedures ----------------------------------------------------------------*/
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void SensorApplicationPowerUp
     ( void );
 
@@ -33,5 +37,9 @@ void SensorApplicationInit
 
 void SensorApplicationPowerDown
     ( void );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // SENSOR_APPLICATION_PUBLIC_INTERFACE_H

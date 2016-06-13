@@ -26,6 +26,10 @@
 
 /* Procedures ----------------------------------------------------------------*/
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void UartPowerUp
     (
     void
@@ -42,5 +46,9 @@ void UartWriteData
     uint32_t        a_DataSize,
     uint32_t        a_TimeOut_Ms
     );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // UART_INTERFACE_H

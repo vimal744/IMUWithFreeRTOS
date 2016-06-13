@@ -22,6 +22,9 @@
 
 /* Private Includes ----------------------------------------------------------*/
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /* Literal Constants ---------------------------------------------------------*/
 
@@ -74,5 +77,9 @@ boolean SensorFusionAddCompassData
     (
     const CompassDataType* const a_PtrCmpsData
     );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // SENSOR_FUSION_PUBLIC_INTERFACE_H

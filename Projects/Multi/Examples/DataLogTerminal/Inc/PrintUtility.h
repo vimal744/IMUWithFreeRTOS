@@ -17,8 +17,11 @@
 #include "GeneralTypes.h"
 #include "cmsis_os.h"
 
-/* Private Includes ----------------------------------------------------------*/
+#ifdef __cplusplus
+extern "C" {
+#endif
 
+/* Private Includes ----------------------------------------------------------*/
 
 /* Literal Constants ---------------------------------------------------------*/
 
@@ -36,6 +39,11 @@ void Printf
     char *format,
     ...
     );
+
+
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif // PRINT_UTILITY_H

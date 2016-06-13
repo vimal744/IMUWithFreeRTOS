@@ -16,6 +16,10 @@
 
 #include "GeneralTypes.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* Private Includes ----------------------------------------------------------*/
 
 
@@ -33,5 +37,9 @@ void SensorGyroReaderInit
 
 void SensorGyroReaderPowerDown
     ( void );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // SENSOR_GYRO_READER_PUBLIC_INTERFACE_H

@@ -83,8 +83,37 @@ static void RTC_Handler( void );
  * @param  None
  * @retval Integer
  */
+
+class Test
+{
+	public:
+
+		Test()
+		: m_Cnt( 0 )
+		{}
+
+		~Test(){}
+
+		void SetCnt( uint8_t a_Val )
+		{
+			m_Cnt = a_Val;
+		}
+
+		uint8_t GetCnt() const
+		{
+			return m_Cnt;
+		}
+
+	private:
+
+		uint8_t m_Cnt;
+
+};
+
 int main( void )
 {
+	Test myTestClassObj;
+
     // Power up the UART
     UartPowerUp();
 

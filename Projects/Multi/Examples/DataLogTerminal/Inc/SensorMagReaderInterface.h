@@ -25,6 +25,10 @@
 
 /* Procedures ----------------------------------------------------------------*/
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void SensorMagReaderPowerUp
     ( void );
 
@@ -33,5 +37,11 @@ void SensorMagReaderInit
 
 void SensorMagReaderPowerDown
     ( void );
+
+
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif // SENSOR_MAG_READER_PUBLIC_INTERFACE_H

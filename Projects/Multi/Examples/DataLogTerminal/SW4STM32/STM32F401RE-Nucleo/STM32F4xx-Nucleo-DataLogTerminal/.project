@@ -23,6 +23,7 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 		<nature>fr.ac6.mcu.ide.core.MCUProjectNature</nature>
+		<nature>org.eclipse.cdt.core.ccnature</nature>
 	</natures>
 	<linkedResources>
 		<link>
@@ -486,9 +487,9 @@
 			<locationURI>PARENT-3-PROJECT_LOC/Src/freertos.c</locationURI>
 		</link>
 		<link>
-			<name>Example/User/Src/main.c</name>
+			<name>Example/User/Src/main.cpp</name>
 			<type>1</type>
-			<locationURI>PARENT-3-PROJECT_LOC/Src/main.c</locationURI>
+			<locationURI>PARENT-3-PROJECT_LOC/Src/main.cpp</locationURI>
 		</link>
 		<link>
 			<name>Example/User/Src/stm32f4xx_hal_msp.c</name>
