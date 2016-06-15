@@ -24,6 +24,8 @@
 #define TRUE    1
 #define FALSE   0
 
+#define min_val( a,b ) ( ( (a) < (b) ) ? ( a ) : ( b ) )
+
 /* Types ---------------------------------------------------------------------*/
 
 typedef uint8_t boolean;

@@ -64,7 +64,6 @@ typedef struct
 
 } QueueDataType;
 
-
 /* Global Variables ----------------------------------------------------------*/
 
 static TaskHandle_t                 s_SensorFusion_Main_Handle;
@@ -115,7 +114,6 @@ void SensorFusionPowerUp
     // Create the queue to hold the incoming sensor data
     s_DataQueue            = xQueueCreate( 32, sizeof( QueueDataType ) );
 
-
     memset( &s_LastGyroData, 0, sizeof( GyroDataType ) );
     s_GyroDataValid = FALSE;
 
@@ -125,11 +123,10 @@ void SensorFusionPowerUp
     memset( &s_LastCmpsData, 0, sizeof( CompassDataType ) );
     s_CompassDataValid = FALSE;
 
+    // Reset the static variables
+    memset( &s_QuaternionData, 0, sizeof( SensorQuaternionDataType ) );
+
     s_LastTimeStamp = 0;
-
-
-    // Create the sensor fusion thread
-    xTaskCreate( MainSensorFusion, c_ThreadName, SENSOR_FUSION_MAIN_STACK_SIZE, NULL, SENSOR_FUSION_TASK_PRI, &s_SensorFusion_Main_Handle );
 }
 
 /**
@@ -139,8 +136,8 @@ void SensorFusionPowerUp
 void SensorFusionInit
     ( void )
 {
-    // Reset the static variables
-    memset( &s_QuaternionData, 0, sizeof( SensorQuaternionDataType ) );
+    // Create the sensor fusion thread
+    xTaskCreate( MainSensorFusion, c_ThreadName, SENSOR_FUSION_MAIN_STACK_SIZE, NULL, SENSOR_FUSION_TASK_PRI, &s_SensorFusion_Main_Handle );
 }
 
 /**
@@ -266,7 +263,7 @@ static void MainSensorFusion
                     s_LastGyroData.meas[0], s_LastGyroData.meas[1], s_LastGyroData.meas[2],
                     s_LastAccelData.meas[0], s_LastAccelData.meas[1], s_LastAccelData.meas[2],
                     s_LastCmpsData.meas[0], s_LastCmpsData.meas[1], s_LastCmpsData.meas[2],
-					s_LastTimeStamp
+                    s_LastTimeStamp
                     );
             }
         }
@@ -308,7 +305,7 @@ static boolean ProcessDataQueue
             }
         else if( SNSR_ID_ACCEL == queueItem.SensorId )
             {
-        	memcpy( &s_LastAccelData, &(queueItem.SensorData), sizeof( AccelDataType ) );
+            memcpy( &s_LastAccelData, &(queueItem.SensorData), sizeof( AccelDataType ) );
             s_AccelDataValid = TRUE;
 
             SensorFusion_Debug_Printf
@@ -323,7 +320,7 @@ static boolean ProcessDataQueue
             }
         else if( SNSR_ID_CMPS == queueItem.SensorId )
             {
-        	memcpy( &s_LastCmpsData, &(queueItem.SensorData), sizeof( CompassDataType ) );
+            memcpy( &s_LastCmpsData, &(queueItem.SensorData), sizeof( CompassDataType ) );
             s_CompassDataValid = TRUE;
 
             SensorFusion_Debug_Printf

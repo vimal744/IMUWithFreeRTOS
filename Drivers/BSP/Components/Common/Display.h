@@ -47,11 +47,12 @@ typedef struct
   DrvStatusTypeDef ( *DeInit                        ) ( DrvContextTypeDef*                                                                  );
   DrvStatusTypeDef ( *Display_Enable                ) ( DrvContextTypeDef*                                                                  );
   DrvStatusTypeDef ( *Display_Disable               ) ( DrvContextTypeDef*                                                                  );
-  DrvStatusTypeDef ( *Display_FillRect              ) ( DrvContextTypeDef*, uint16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t  );
+  DrvStatusTypeDef ( *Display_FillRect              ) ( DrvContextTypeDef*, int16_t, int16_t, int16_t, int16_t, uint16_t                    );
   DrvStatusTypeDef ( *Display_FillScrn              ) ( DrvContextTypeDef*, uint16_t                                                        );
-  DrvStatusTypeDef ( *Display_Write_Char            ) ( DrvContextTypeDef*, unsigned char                                                   );
-  DrvStatusTypeDef ( *Display_Set_Cursor            ) ( DrvContextTypeDef*, int16_t,  int16_t                                               );
-  DrvStatusTypeDef ( *Display_Set_Text_Color        ) ( DrvContextTypeDef*, uint16_t, uint16_t                                              );
+  DrvStatusTypeDef ( *Display_Draw_Pixel            ) ( DrvContextTypeDef*, int16_t , int16_t, uint16_t                                     );
+  DrvStatusTypeDef ( *Display_Draw_Vert_Line        ) ( DrvContextTypeDef*, int16_t , int16_t, int16_t, uint16_t                            );
+  DrvStatusTypeDef ( *Display_Draw_Horz_Line        ) ( DrvContextTypeDef*, int16_t , int16_t, int16_t, uint16_t                            );
+
 } DISPLAY_Drv_t;
 
 /**

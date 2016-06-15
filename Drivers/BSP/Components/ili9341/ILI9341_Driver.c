@@ -1,7 +1,9 @@
 /**
  ******************************************************************************
  * @file    ILI9341_Driver.c
+ * Refernce:  https://github.com/adafruit/Adafruit_ILI9341
  */
+
 
 /* Includes ------------------------------------------------------------------*/
 #include "ILI9341_Driver.h"
@@ -213,7 +215,6 @@ ILI9341_Error_et ILI9341_DrawFastVerticalLine(void *handle, int16_t x, int16_t y
 
 }
 
-
 ILI9341_Error_et ILI9341_DrawFastHorizontalLine(void *handle, int16_t x, int16_t y, int16_t w, uint16_t color)
 {
     // Rudimentary clipping
@@ -245,22 +246,6 @@ ILI9341_Error_et ILI9341_FillRect
     int16_t h
     )
 {
-
-    // rudimentary clipping (drawChar w/big text requires this)
-    if((x >= MAX_WIDTH) || (y >= MAX_HEIGHT))
-    {
-        return ILI9341_ERROR;
-    }
-
-    if((x + w - 1) >= MAX_WIDTH)
-    {
-        w = MAX_WIDTH - x;
-    }
-
-    if((y + h - 1) >= MAX_HEIGHT)
-    {
-        h = MAX_HEIGHT - y;
-    }
 
     ILI9341_SetAddressWindow(handle,x, y, x+w-1, y+h-1);
 

@@ -15,6 +15,7 @@
 /* Public Includes -----------------------------------------------------------*/
 
 #include "GeneralTypes.h"
+#include "AccelTypes.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -37,6 +38,11 @@ void SensorAccelReaderInit
 
 void SensorAccelReaderPowerDown
     ( void );
+
+void SensorAccelGetAccelData
+    (
+    AccelDataType* a_PtrAccelData
+    );
 
 #ifdef __cplusplus
 }

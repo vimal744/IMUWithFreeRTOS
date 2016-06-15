@@ -357,9 +357,19 @@
 			<locationURI>PARENT-3-PROJECT_LOC/Inc/GeneralTypes.h</locationURI>
 		</link>
 		<link>
+			<name>Example/User/Inc/GraphicsInterface.h</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/Inc/GraphicsInterface.h</locationURI>
+		</link>
+		<link>
 			<name>Example/User/Inc/GyroTypes.h</name>
 			<type>1</type>
 			<locationURI>PARENT-3-PROJECT_LOC/Inc/GyroTypes.h</locationURI>
+		</link>
+		<link>
+			<name>Example/User/Inc/Inc</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
 			<name>Example/User/Inc/SensorAccelReaderInterface.h</name>
@@ -397,6 +407,11 @@
 			<locationURI>PARENT-3-PROJECT_LOC/Inc/UartInterface.h</locationURI>
 		</link>
 		<link>
+			<name>Example/User/Inc/UserInterface.h</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/Inc/UserInterface.h</locationURI>
+		</link>
+		<link>
 			<name>Example/User/Inc/com.h</name>
 			<type>1</type>
 			<locationURI>PARENT-3-PROJECT_LOC/Inc/com.h</locationURI>
@@ -427,6 +442,16 @@
 			<locationURI>PARENT-3-PROJECT_LOC/Inc/stm32f4xx_it.h</locationURI>
 		</link>
 		<link>
+			<name>Example/User/Src/DisplayInterface.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/Src/DisplayInterface.cpp</locationURI>
+		</link>
+		<link>
+			<name>Example/User/Src/GraphicsInterface.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/Src/GraphicsInterface.cpp</locationURI>
+		</link>
+		<link>
 			<name>Example/User/Src/MadgwickAHRS.c</name>
 			<type>1</type>
 			<locationURI>PARENT-3-PROJECT_LOC/Src/MadgwickAHRS.c</locationURI>
@@ -447,9 +472,9 @@
 			<locationURI>PARENT-3-PROJECT_LOC/Src/SensorAccelReaderMain.c</locationURI>
 		</link>
 		<link>
-			<name>Example/User/Src/SensorApplicationMain.c</name>
+			<name>Example/User/Src/SensorApplicationMain.cpp</name>
 			<type>1</type>
-			<locationURI>PARENT-3-PROJECT_LOC/Src/SensorApplicationMain.c</locationURI>
+			<locationURI>PARENT-3-PROJECT_LOC/Src/SensorApplicationMain.cpp</locationURI>
 		</link>
 		<link>
 			<name>Example/User/Src/SensorFusionMain.c</name>
@@ -470,6 +495,11 @@
 			<name>Example/User/Src/UartInterface.c</name>
 			<type>1</type>
 			<locationURI>PARENT-3-PROJECT_LOC/Src/UartInterface.c</locationURI>
+		</link>
+		<link>
+			<name>Example/User/Src/UserInterface.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/Src/UserInterface.cpp</locationURI>
 		</link>
 		<link>
 			<name>Example/User/Src/com.c</name>
@@ -560,6 +590,16 @@
 			<name>Drivers/BSP/Components/Common/temperature.h</name>
 			<type>1</type>
 			<locationURI>PARENT-7-PROJECT_LOC/Drivers/BSP/Components/Common/temperature.h</locationURI>
+		</link>
+		<link>
+			<name>Example/User/Inc/Inc/DisplayInterface.h</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/Inc/DisplayInterface.h</locationURI>
+		</link>
+		<link>
+			<name>Example/User/Inc/Inc/GraphicsInterface.h</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/Inc/GraphicsInterface.h</locationURI>
 		</link>
 		<link>
 			<name>Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS</name>

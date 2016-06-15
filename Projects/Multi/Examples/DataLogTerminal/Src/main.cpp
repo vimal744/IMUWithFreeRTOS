@@ -47,7 +47,20 @@
 #include "SensorMagReaderInterface.h"
 #include "SensorFusionInterface.h"
 #include "SensorApplicationInterface.h"
+#include "DisplayInterface.h"
 #include "stm32f4xx_hal_conf.h"
+#include "FreeRTOS.h"
+#include "task.h"
+
+
+
+#define STARTUP_TASK_STACK_SIZE      ( 256 )
+
+static const char* c_Startup_Task_Name = "Main";
+
+static TaskHandle_t     s_Startup_Task_Handle;
+static boolean s_Inited = FALSE;
+
 
 
 /** @addtogroup X_NUCLEO_IKS01A1_Examples
@@ -72,6 +85,12 @@ static void RTC_TimeStampConfig( void );
 static void floatToInt( float in, int32_t *out_int, int32_t *out_dec, int32_t dec_prec );
 static void RTC_Handler( void );
 
+static void MainStartupTask
+    (
+    void* a_Ptr
+    );
+
+
 /* Private functions ---------------------------------------------------------*/
 
 /**
@@ -83,37 +102,8 @@ static void RTC_Handler( void );
  * @param  None
  * @retval Integer
  */
-
-class Test
-{
-	public:
-
-		Test()
-		: m_Cnt( 0 )
-		{}
-
-		~Test(){}
-
-		void SetCnt( uint8_t a_Val )
-		{
-			m_Cnt = a_Val;
-		}
-
-		uint8_t GetCnt() const
-		{
-			return m_Cnt;
-		}
-
-	private:
-
-		uint8_t m_Cnt;
-
-};
-
 int main( void )
 {
-	Test myTestClassObj;
-
     // Power up the UART
     UartPowerUp();
 
@@ -136,58 +126,47 @@ int main( void )
     RTC_Config();
     RTC_TimeStampConfig();
 
-
     // Powerup the various modules
-    UartInit();
+    UartPowerUp();
+    DisplayPowerUp();
     SensorFusionPowerUp();
     SensorAccelReaderPowerUp();
     SensorGyroReaderPowerUp();
     SensorMagReaderPowerUp();
-
     SensorApplicationPowerUp();
 
-    // Init the various modules
-    SensorFusionInit();
-    SensorAccelReaderInit();
-    SensorGyroReaderInit();
-    SensorMagReaderInit();
-    SensorApplicationInit();
+    // Create a startup task to Init all the modules
+    xTaskCreate( MainStartupTask, c_Startup_Task_Name, STARTUP_TASK_STACK_SIZE, NULL, 4, &s_Startup_Task_Handle );
 
     /* Start scheduler */
     osKernelStart();
-
-    while (1)
+    while(1){}
     {
     }
 
 }
 
 
-
 /**
- * @brief  Splits a float into two integer values.
- * @param  in the float value as input
- * @param  out_int the pointer to the integer part as output
- * @param  out_dec the pointer to the decimal part as output
- * @param  dec_prec the decimal precision to be used
- * @retval None
- */
-static void floatToInt( float in, int32_t *out_int, int32_t *out_dec, int32_t dec_prec )
+* @brief Main for the sensor application thread
+*/
+static void MainStartupTask
+    (
+    void*           a_Ptr
+    )
 {
+    // Init all the required modules
+    UartInit();
+    DisplayInit();
+    SensorAccelReaderInit();
+    SensorGyroReaderInit();
+    SensorMagReaderInit();
+    SensorFusionInit();
+    SensorApplicationInit();
 
-  *out_int = (int32_t)in;
-  if(in >= 0.0f)
-  {
-    in = in - (float)(*out_int);
-  }
-  else
-  {
-    in = (float)(*out_int) - in;
-  }
-  *out_dec = (int32_t)trunc(in * pow(10, dec_prec));
+    // Delete the startup task
+    vTaskDelete( s_Startup_Task_Handle );
 }
-
-
 
 /**
  * @brief  Handles the time+date getting/sending

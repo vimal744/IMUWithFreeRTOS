@@ -47,6 +47,9 @@ static TaskHandle_t s_SensorAccelReader_Main_Handle;
 
 static void *LSM6DS0_X_0_handle = NULL;
 static boolean s_AccelEnabled = FALSE;
+static AccelDataType                s_IntfAccelData;
+static SemaphoreHandle_t            s_IntfAccelData_Mutex;
+
 
 
 /* Procedures ----------------------------------------------------------------*/
@@ -56,6 +59,7 @@ static void enableAccelerometer( void );
 static void disableAccelerometer( void );
 static void Accelero_Sensor_Handler( AccelDataType* a_PtrAccelData, void *handle );
 static void MainSensorAccelReader( void* a_Ptr );
+static void UpdateInterfaceAccelData( const AccelDataType* const a_PtrAccelData );
 
 /**
 * @brief Power up the sensor Reader thread
@@ -64,9 +68,8 @@ static void MainSensorAccelReader( void* a_Ptr );
 void SensorAccelReaderPowerUp
     ( void )
 {
+    memset( (void*)&s_IntfAccelData, 0, sizeof( AccelDataType ) );
     s_AccelEnabled = FALSE;
-    initAccelerometer();
-    xTaskCreate( MainSensorAccelReader, c_ThreadName, SNSR_ACCL_READER_MAIN_STK_SZ, NULL, SENSOR_ACCL_READER_TASK_PRI, &s_SensorAccelReader_Main_Handle );
 }
 
 /**
@@ -76,6 +79,10 @@ void SensorAccelReaderPowerUp
 void SensorAccelReaderInit
     ( void )
 {
+    s_IntfAccelData_Mutex = xSemaphoreCreateRecursiveMutex();
+    initAccelerometer();
+    enableAccelerometer();
+    xTaskCreate( MainSensorAccelReader, c_ThreadName, SNSR_ACCL_READER_MAIN_STK_SZ, NULL, SENSOR_ACCL_READER_TASK_PRI, &s_SensorAccelReader_Main_Handle );
 }
 
 /**
@@ -93,6 +100,22 @@ void SensorAccelReaderPowerDown
     }
 }
 
+/**
+* @brief Main for the sensor Reader thread
+*
+* NOTE: Currently simulating the data because I could not get the sensor board to work
+*
+*/
+
+void SensorAccelGetAccelData
+    (
+    AccelDataType* a_PtrAccelData
+    )
+{
+xSemaphoreTake( s_IntfAccelData_Mutex, portMAX_DELAY );
+*a_PtrAccelData = s_IntfAccelData;
+xSemaphoreGive( s_IntfAccelData_Mutex );
+}
 
 /**
 * @brief Main for the sensor Reader thread
@@ -109,17 +132,12 @@ static void MainSensorAccelReader
     AccelDataType   accelData;
     for(;;)
     {
-        if( !s_AccelEnabled )
-        {
-            s_AccelEnabled = TRUE;
-            enableAccelerometer();
-        }
-
         // Send Accel data to Sensor Fusion thread
         Accelero_Sensor_Handler( &accelData, LSM6DS0_X_0_handle );
         SensorAccelReader_Debug_Printf(("SR: Tx Accl x=%f, y=%f, z=%f\r\n", accelData.meas[0], accelData.meas[1], accelData.meas[2] ));
         SensorFusionAddAccelData( &accelData );
-        osDelay(1);
+        UpdateInterfaceAccelData( &accelData );
+        osDelay(10);
     }
 }
 
@@ -140,7 +158,11 @@ static void initAccelerometer( void )
  */
 static void enableAccelerometer( void )
 {
-  BSP_ACCELERO_Sensor_Enable( LSM6DS0_X_0_handle );
+    if( !s_AccelEnabled )
+    {
+        BSP_ACCELERO_Sensor_Enable( LSM6DS0_X_0_handle );
+        s_AccelEnabled = TRUE;
+    }
 }
 
 /**
@@ -182,9 +204,18 @@ static void Accelero_Sensor_Handler
             acceleration.AXIS_Z = 0;
         }
 
-
-        a_PtrAccelData->meas[0] = (float)acceleration.AXIS_X / 1000.0f;
-        a_PtrAccelData->meas[1] = (float)acceleration.AXIS_Y / 1000.0f;
-        a_PtrAccelData->meas[2] = (float)acceleration.AXIS_Z / 1000.0f;
+        a_PtrAccelData->meas[0] = -(float)acceleration.AXIS_X / 1000.0f;
+        a_PtrAccelData->meas[1] = -(float)acceleration.AXIS_Y / 1000.0f;
+        a_PtrAccelData->meas[2] = -(float)acceleration.AXIS_Z / 1000.0f;
     }
+}
+
+static void UpdateInterfaceAccelData
+    (
+    const AccelDataType* const a_PtrAccelData
+    )
+{
+xSemaphoreTake( s_IntfAccelData_Mutex, portMAX_DELAY );
+s_IntfAccelData = *a_PtrAccelData;
+xSemaphoreGive( s_IntfAccelData_Mutex );
 }

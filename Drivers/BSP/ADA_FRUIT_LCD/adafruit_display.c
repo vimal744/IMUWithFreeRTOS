@@ -1,5 +1,15 @@
-/* Includes ------------------------------------------------------------------*/
+/**
+  ******************************************************************************
+  * File Name          : Display Driver
+  * Description        : Implementation for the Sensor Application
+  ******************************************************************************
+  *
+  * COPYRIGHT(c) 2016 Vimal Mehta
+  *
+  ******************************************************************************
+  */
 
+/* Public Includes -----------------------------------------------------------*/
 #include "adafruit_display.h"
 #include "cmsis_os.h"
 #include <stddef.h>
@@ -152,16 +162,11 @@ DrvStatusTypeDef BSP_DISPLAY_Enable( void *handle )
         return COMPONENT_ERROR;
     }
 
-    if ( driver->Display_FillRect( ctx , 0x0000, 0, 0, 240, 320, 240, 320 ) == COMPONENT_ERROR )
-    {
-      return COMPONENT_ERROR;
-    }
-
     return COMPONENT_OK;
 
 }
 
-DrvStatusTypeDef BSP_DISPLAY_Fill_Screen( void *handle, uint16_t a_Color )
+DrvStatusTypeDef BSP_DISPLAY_Draw_Pixel( void *handle,  int16_t x, int16_t y, uint16_t color )
 {
     DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
     DISPLAY_Drv_t *driver = NULL;
@@ -173,7 +178,7 @@ DrvStatusTypeDef BSP_DISPLAY_Fill_Screen( void *handle, uint16_t a_Color )
 
     driver = ( DISPLAY_Drv_t * )ctx->pVTable;
 
-    if ( driver->Display_FillScrn( ctx , a_Color ) == COMPONENT_ERROR )
+    if ( driver->Display_Draw_Pixel( ctx , x, y, color ) == COMPONENT_ERROR )
     {
       return COMPONENT_ERROR;
     }
@@ -181,7 +186,7 @@ DrvStatusTypeDef BSP_DISPLAY_Fill_Screen( void *handle, uint16_t a_Color )
     return COMPONENT_OK;
 }
 
-DrvStatusTypeDef BSP_DISPLAY_Write_Char( void *handle, unsigned char a_Char )
+DrvStatusTypeDef BSP_DISPLAY_Fill_Rect( void *handle, int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color )
 {
     DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
     DISPLAY_Drv_t *driver = NULL;
@@ -193,7 +198,7 @@ DrvStatusTypeDef BSP_DISPLAY_Write_Char( void *handle, unsigned char a_Char )
 
     driver = ( DISPLAY_Drv_t * )ctx->pVTable;
 
-    if ( driver->Display_Write_Char( ctx , a_Char ) == COMPONENT_ERROR )
+    if ( driver->Display_FillRect( ctx , x, y, w, h, color ) == COMPONENT_ERROR )
     {
       return COMPONENT_ERROR;
     }
@@ -201,43 +206,7 @@ DrvStatusTypeDef BSP_DISPLAY_Write_Char( void *handle, unsigned char a_Char )
     return COMPONENT_OK;
 }
 
-DrvStatusTypeDef BSP_DISPLAY_Printf( void *handle, char *buf, int size, char *format, ...)
-{
-    va_list args;
-    int len;
-    va_start(args, format);
-    len = vsnprintf(buf, size, format, args);
-    va_end(args);
-
-    return BSP_DISPLAY_Write_String( handle, buf, len );
-}
-
-DrvStatusTypeDef BSP_DISPLAY_Write_String( void *handle, char* a_PtrString, uint8_t size )
-{
-    DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
-    DISPLAY_Drv_t *driver = NULL;
-    uint8_t i;
-
-    if(ctx == NULL)
-    {
-        return COMPONENT_ERROR;
-    }
-
-    driver = ( DISPLAY_Drv_t * )ctx->pVTable;
-
-    for( i = 0; i < size; i++ )
-    {
-        if ( driver->Display_Write_Char( ctx , a_PtrString[i] ) == COMPONENT_ERROR )
-        {
-          return COMPONENT_ERROR;
-        }
-    }
-
-    return COMPONENT_OK;
-}
-
-
-DrvStatusTypeDef BSP_DISPLAY_Set_Cursor( void *handle, int16_t a_X, int16_t a_Y )
+DrvStatusTypeDef BSP_DISPLAY_Draw_Vert_Line( void *handle, int16_t x, int16_t y, int16_t h, uint16_t color )
 {
     DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
     DISPLAY_Drv_t *driver = NULL;
@@ -249,7 +218,7 @@ DrvStatusTypeDef BSP_DISPLAY_Set_Cursor( void *handle, int16_t a_X, int16_t a_Y 
 
     driver = ( DISPLAY_Drv_t * )ctx->pVTable;
 
-    if ( driver->Display_Set_Cursor( ctx , a_X, a_Y ) == COMPONENT_ERROR )
+    if ( driver->Display_Draw_Vert_Line( ctx , x, y, h, color ) == COMPONENT_ERROR )
     {
       return COMPONENT_ERROR;
     }
@@ -257,7 +226,7 @@ DrvStatusTypeDef BSP_DISPLAY_Set_Cursor( void *handle, int16_t a_X, int16_t a_Y 
     return COMPONENT_OK;
 }
 
-DrvStatusTypeDef BSP_DISPLAY_Set_Text_Color( void *handle, uint16_t a_FC, uint16_t a_BC )
+DrvStatusTypeDef BSP_DISPLAY_Draw_Horz_Line( void *handle, int16_t x, int16_t y, int16_t w, uint16_t color )
 {
     DrvContextTypeDef *ctx = (DrvContextTypeDef *)handle;
     DISPLAY_Drv_t *driver = NULL;
@@ -269,15 +238,13 @@ DrvStatusTypeDef BSP_DISPLAY_Set_Text_Color( void *handle, uint16_t a_FC, uint16
 
     driver = ( DISPLAY_Drv_t * )ctx->pVTable;
 
-    if ( driver->Display_Set_Text_Color( ctx , a_FC, a_BC ) == COMPONENT_ERROR )
+    if ( driver->Display_Draw_Horz_Line( ctx , x, y, w, color ) == COMPONENT_ERROR )
     {
       return COMPONENT_ERROR;
     }
 
     return COMPONENT_OK;
 }
-
-
 
 DrvStatusTypeDef BSP_DISPLAY_Disable( void *handle )
 {
@@ -371,7 +338,7 @@ static uint8_t SPI1_Init( void )
         SPI1_Handle.Init.FirstBit           = SPI_FIRSTBIT_MSB;
         SPI1_Handle.Init.CLKPolarity        = SPI_POLARITY_LOW;
         SPI1_Handle.Init.CLKPhase           = SPI_PHASE_1EDGE;
-        SPI1_Handle.Init.BaudRatePrescaler  = SPI_BAUDRATEPRESCALER_32;
+        SPI1_Handle.Init.BaudRatePrescaler  = SPI_BAUDRATEPRESCALER_2;
 
         SPI1_Handle.Init.CRCCalculation     = SPI_CRCCALCULATION_DISABLED;
         SPI1_Handle.Init.CRCPolynomial      = 7;

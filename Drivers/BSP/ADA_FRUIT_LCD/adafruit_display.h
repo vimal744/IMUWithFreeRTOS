@@ -69,12 +69,17 @@ DrvStatusTypeDef BSP_DISPLAY_Init( DISPLAY_ID_t id, void **handle );
 DrvStatusTypeDef BSP_DISPLAY_DeInit( void **handle );
 DrvStatusTypeDef BSP_DISPLAY_Enable( void *handle );
 DrvStatusTypeDef BSP_DISPLAY_Disable( void *handle );
-DrvStatusTypeDef BSP_DISPLAY_Fill_Screen( void *handle, uint16_t a_Color );
-DrvStatusTypeDef BSP_DISPLAY_Write_Char( void* handle, unsigned char a_Char );
-DrvStatusTypeDef BSP_DISPLAY_Set_Cursor( void *handle, int16_t a_X, int16_t a_Y );
-DrvStatusTypeDef BSP_DISPLAY_Set_Text_Color( void *handle, uint16_t a_FC, uint16_t a_BC );
-DrvStatusTypeDef BSP_DISPLAY_Write_String( void *handle, char* a_PtrString, uint8_t size );
-DrvStatusTypeDef BSP_DISPLAY_Printf( void *handle, char *buf, int size, char *format, ...);
+DrvStatusTypeDef BSP_DISPLAY_Draw_Pixel( void *handle,  int16_t x, int16_t y, uint16_t color );
+DrvStatusTypeDef BSP_DISPLAY_Fill_Rect( void *handle, int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color );
+DrvStatusTypeDef BSP_DISPLAY_Draw_Vert_Line( void *handle, int16_t x, int16_t y, int16_t h, uint16_t color );
+DrvStatusTypeDef BSP_DISPLAY_Draw_Horz_Line( void *handle, int16_t x, int16_t y, int16_t w, uint16_t color );
+
+//DrvStatusTypeDef BSP_DISPLAY_Fill_Screen( void *handle, uint16_t a_Color );
+//DrvStatusTypeDef BSP_DISPLAY_Write_Char( void* handle, unsigned char a_Char );
+//DrvStatusTypeDef BSP_DISPLAY_Set_Cursor( void *handle, int16_t a_X, int16_t a_Y );
+//DrvStatusTypeDef BSP_DISPLAY_Set_Text_Color( void *handle, uint16_t a_FC, uint16_t a_BC );
+//DrvStatusTypeDef BSP_DISPLAY_Write_String( void *handle, char* a_PtrString, uint8_t size );
+//DrvStatusTypeDef BSP_DISPLAY_Printf( void *handle, char *buf, int size, char *format, ...);
 
 
 #ifdef __cplusplus

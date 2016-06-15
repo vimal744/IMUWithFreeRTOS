@@ -63,8 +63,6 @@ void SensorMagReaderPowerUp
     ( void )
 {
     s_MagEnabled = FALSE;
-    initMag();
-    xTaskCreate( MainSensorMagReader, c_ThreadName, SNSR_MAG_READER_MAIN_STK_SZ, NULL, SENSOR_MAG_READER_TASK_PRI, &s_SensorMagReader_Main_Handle );
 }
 
 /**
@@ -74,6 +72,9 @@ void SensorMagReaderPowerUp
 void SensorMagReaderInit
     ( void )
 {
+    initMag();
+    enableMag();
+    xTaskCreate( MainSensorMagReader, c_ThreadName, SNSR_MAG_READER_MAIN_STK_SZ, NULL, SENSOR_MAG_READER_TASK_PRI, &s_SensorMagReader_Main_Handle );
 }
 
 /**
@@ -108,8 +109,6 @@ static void MainSensorMagReader
 
     for(;;)
     {
-        enableMag();
-
         // Populate Compass Data
         Mag_Sensor_Handler( &cmpsData, LIS3MDL_0_handle );
         SensorMagReader_Debug_Printf(("SR: Tx Cmps x=%f, y=%f, z=%f\r\n", cmpsData.meas[0], cmpsData.meas[1], cmpsData.meas[2] ));

@@ -62,6 +62,7 @@
 static uint32_t I2C_EXPBD_Timeout = NUCLEO_I2C_EXPBD_TIMEOUT_MAX;    /*<! Value of Timeout when I2C communication fails */
 static I2C_HandleTypeDef I2C_EXPBD_Handle;
 static SemaphoreHandle_t            s_I2C_Mutex;
+static unsigned char 			s_Inited = 0;
 
 /**
  * @}
@@ -77,6 +78,8 @@ static uint8_t I2C_EXPBD_ReadData( uint8_t Addr, uint8_t Reg, uint8_t* pBuffer, 
 static uint8_t I2C_EXPBD_WriteData( uint8_t Addr, uint8_t Reg, uint8_t* pBuffer, uint16_t Size );
 static uint8_t I2C_EXPBD_Init( void );
 
+
+
 /** @addtogroup X_NUCLEO_IKS01A1_IO_Public_Functions Public functions
  * @{
  */
@@ -89,7 +92,13 @@ static uint8_t I2C_EXPBD_Init( void );
  */
 DrvStatusTypeDef Sensor_IO_Init( void )
 {
-  s_I2C_Mutex = xSemaphoreCreateRecursiveMutex();
+
+  if( !s_Inited )
+  {
+	  s_Inited = 1;
+	  s_I2C_Mutex = xSemaphoreCreateRecursiveMutex();
+  }
+
 
   if ( I2C_EXPBD_Init() )
   {
@@ -346,8 +355,8 @@ static uint8_t I2C_EXPBD_WriteData( uint8_t Addr, uint8_t Reg, uint8_t* pBuffer,
   {
 
     /* Execute user timeout callback */
-    I2C_EXPBD_Error( Addr );
-    xSemaphoreGive( s_I2C_Mutex );
+	xSemaphoreGive( s_I2C_Mutex );
+	I2C_EXPBD_Error( Addr );
     return 1;
   }
   else
@@ -383,8 +392,8 @@ static uint8_t I2C_EXPBD_ReadData( uint8_t Addr, uint8_t Reg, uint8_t* pBuffer, 
   {
 
     /* Execute user timeout callback */
+	xSemaphoreGive( s_I2C_Mutex );
     I2C_EXPBD_Error( Addr );
-    xSemaphoreGive( s_I2C_Mutex );
     return 1;
   }
   else
